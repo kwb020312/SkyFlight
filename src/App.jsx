@@ -5,6 +5,7 @@ import {
 } from "@react-three/drei";
 import SphereEnv from "./SphereEnv";
 import Landscape from "./Landscape";
+import Airplane from "./Airplane";
 
 function App() {
   return (
@@ -17,7 +18,10 @@ function App() {
       <PerspectiveCamera makeDefault position={[0, 10, 10]} />
       <OrbitControls target={[0, 0, 0]} />
 
+      {/* 지면 데이터 총괄 */}
       <Landscape />
+      {/* 비행기 모델 */}
+      <Airplane />
 
       <directionalLight
         castShadow
