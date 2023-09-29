@@ -7,3 +7,39 @@ window.addEventListener("keydown", (e) => {
 window.addEventListener("keyup", (e) => {
   controls[e.key.toLowerCase()] = false;
 });
+
+let jawVelocity = 0;
+let pitchVelocity = 0;
+let planeSpeed = 0.006;
+export function updatePlaneAxis(x, y, z, planePosition, camera) {
+  jawVelocity = 0;
+  pitchVelocity = 0;
+
+  if (controls["a"]) {
+    jawVelocity = 0.025;
+  }
+
+  if (controls["d"]) {
+    jawVelocity = -0.025;
+  }
+
+  if (controls["s"]) {
+    pitchVelocity = 0.025;
+  }
+
+  if (controls["w"]) {
+    pitchVelocity = -0.025;
+  }
+
+  x.applyAxisAngle(z, jawVelocity);
+  y.applyAxisAngle(z, jawVelocity);
+
+  y.applyAxisAngle(x, pitchVelocity);
+  z.applyAxisAngle(x, pitchVelocity);
+
+  x.normalize();
+  y.normalize();
+  z.normalize();
+
+  planePosition.add(z.clone().multiplyScalar(-planeSpeed));
+}

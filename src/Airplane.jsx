@@ -2,6 +2,7 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { Matrix4, Vector3 } from "three";
+import { updatePlaneAxis } from "./controls";
 
 const x = new Vector3(1, 0, 0);
 const y = new Vector3(0, 1, 0);
@@ -17,6 +18,8 @@ const Airplane = (props) => {
 
   // 비행기의 시작점 위치를 4차원 벡터 행렬을 사용하여 위치시킴
   useFrame(({ camera }) => {
+    updatePlaneAxis(x, y, z, planePosition, camera);
+
     const rotMatrix = new Matrix4().makeBasis(x, y, z);
 
     const matrix = new Matrix4()
