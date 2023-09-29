@@ -3,6 +3,10 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { Matrix4, Vector3 } from "three";
 
+const x = new Vector3(1, 0, 0);
+const y = new Vector3(0, 1, 0);
+const z = new Vector3(0, 0, 1);
+
 export const planePosition = new Vector3(0, 3, 7);
 
 // 모델을 만드신 berilbasak님께 감사드립니다.
@@ -13,13 +17,11 @@ const Airplane = (props) => {
 
   // 비행기의 시작점 위치를 4차원 벡터 행렬을 사용하여 위치시킴
   useFrame(({ camera }) => {
-    // planePosition.add(new Vector3(0, 0, -0.005));
+    const rotMatrix = new Matrix4().makeBasis(x, y, z);
 
-    const matrix = new Matrix4().makeTranslation(
-      planePosition.x,
-      planePosition.y,
-      planePosition.z
-    );
+    const matrix = new Matrix4()
+      .makeTranslation(planePosition.x, planePosition.y, planePosition.z)
+      .multiply(rotMatrix);
 
     groupRef.current.matrixAutoUpdate = false;
     groupRef.current.matrix.copy(matrix);
@@ -33,6 +35,7 @@ const Airplane = (props) => {
           planePosition.z
         )
       )
+      .multiply(rotMatrix)
       .multiply(new Matrix4().makeRotationX(-0.2))
       .multiply(new Matrix4().makeTranslation(0, 0.015, 0.3));
 
