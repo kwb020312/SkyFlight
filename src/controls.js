@@ -76,5 +76,5 @@ export function updatePlaneAxis(x, y, z, planePosition, camera) {
   camera.fov = 45 + turboSpeed * 900;
   camera.updateProjectionMatrix();
 
-  planePosition.add(z.clone().multiplyScalar(-planeSpeed));
+  planePosition.add(z.clone().multiplyScalar(-planeSpeed - turboSpeed));
 }
