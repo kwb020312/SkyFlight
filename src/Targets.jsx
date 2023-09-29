@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Vector3 } from "three";
+import { useMemo, useState } from "react";
+import { TorusGeometry, Vector3 } from "three";
+import { mergeBufferGeometries } from "three-stdlib";
 
 function randomPoint(scale) {
   return new Vector3(
@@ -25,15 +26,27 @@ const Targets = () => {
 
     return arr;
   });
+
+  const geometry = useMemo(() => {
+    let geo;
+
+    targets.forEach(
+      (target) => {
+        const torusGeo = new TorusGeometry(TARGET_RAD, 0.02, 8, 25);
+        torusGeo.translate(target.center.x, target.center.y, target.center.z);
+
+        if (!geo) geo = torusGeo;
+        else geo = mergeBufferGeometries([geo, torusGeo]);
+
+        return geo;
+      },
+      [targets]
+    );
+  });
   return (
-    <>
-      {targets.map((target, i) => (
-        <mesh key={i} position={target.center}>
-          <torusGeometry args={[TARGET_RAD, 0.02, 8, 25]} />
-          <meshStandardMaterial roughness={0.5} metalness={0.5} />
-        </mesh>
-      ))}
-    </>
+    <mesh geometry={geometry}>
+      <meshStandardMaterial roughness={0.5} metalness={0.5} />
+    </mesh>
   );
 };
 
