@@ -1,7 +1,7 @@
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
-import { Matrix4, Vector3 } from "three";
+import { Matrix4, Quaternion, Vector3 } from "three";
 import { updatePlaneAxis } from "./controls";
 
 const x = new Vector3(1, 0, 0);
@@ -9,6 +9,9 @@ const y = new Vector3(0, 1, 0);
 const z = new Vector3(0, 0, 1);
 
 export const planePosition = new Vector3(0, 3, 7);
+
+const delayedRotMatrix = new Matrix4();
+const delayedQuaternion = new Quaternion();
 
 // 모델을 만드신 berilbasak님께 감사드립니다.
 const Airplane = (props) => {
@@ -29,6 +32,18 @@ const Airplane = (props) => {
     groupRef.current.matrixAutoUpdate = false;
     groupRef.current.matrix.copy(matrix);
     groupRef.current.matrixWorldNeedsUpdate = true;
+
+    let quaternionA = new Quaternion().copy(delayedQuaternion);
+    let quaternionB = new Quaternion();
+    quaternionB.setFromRotationMatrix(rotMatrix);
+
+    let interpolationFactor = 0.175;
+    let interpolatedQuaternion = new Quaternion().copy(quaternionA);
+    interpolatedQuaternion.slerp(quaternionB, interpolationFactor);
+    delayedQuaternion.copy(interpolatedQuaternion);
+
+    delayedRotMatrix.identity();
+    delayedRotMatrix.makeRotationFromQuaternion(delayedQuaternion);
 
     const cameraMatrix = new Matrix4()
       .multiply(
