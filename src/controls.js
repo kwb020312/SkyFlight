@@ -8,27 +8,34 @@ window.addEventListener("keyup", (e) => {
   controls[e.key.toLowerCase()] = false;
 });
 
+let maxVelocity = 0.04;
 let jawVelocity = 0;
 let pitchVelocity = 0;
 let planeSpeed = 0.006;
 export function updatePlaneAxis(x, y, z, planePosition, camera) {
-  jawVelocity = 0;
-  pitchVelocity = 0;
+  jawVelocity *= 0.95;
+  pitchVelocity *= 0.95;
+
+  if (Math.abs(jawVelocity) > maxVelocity)
+    jawVelocity = Math.sign(jawVelocity) * maxVelocity;
+
+  if (Math.abs(pitchVelocity) > maxVelocity)
+    pitchVelocity = Math.sign(pitchVelocity) * maxVelocity;
 
   if (controls["a"]) {
-    jawVelocity = 0.025;
+    jawVelocity += 0.0025;
   }
 
   if (controls["d"]) {
-    jawVelocity = -0.025;
+    jawVelocity -= 0.0025;
   }
 
   if (controls["s"]) {
-    pitchVelocity = 0.025;
+    pitchVelocity += 0.0025;
   }
 
   if (controls["w"]) {
-    pitchVelocity = -0.025;
+    pitchVelocity -= 0.025;
   }
 
   x.applyAxisAngle(z, jawVelocity);
