@@ -13,6 +13,8 @@ const Airplane = (props) => {
 
   // 비행기의 시작점 위치를 4차원 벡터 행렬을 사용하여 위치시킴
   useFrame(({ camera }) => {
+    planePosition.add(new Vector3(0, 0, -0.005));
+
     const matrix = new Matrix4().makeTranslation(
       planePosition.x,
       planePosition.y,
@@ -37,6 +39,8 @@ const Airplane = (props) => {
     camera.matrixAutoUpdate = false;
     camera.matrix.copy(cameraMatrix);
     camera.matrixWorldNeedsUpdate = true;
+
+    helixMeshRef.current.rotation.z -= 1.0;
   });
 
   return (
