@@ -6,6 +6,7 @@ import {
 import SphereEnv from "./SphereEnv";
 import Landscape from "./Landscape";
 import Airplane from "./Airplane";
+import Targets from "./Targets";
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
       <Landscape />
       {/* 비행기 모델 */}
       <Airplane />
+      {/* 타겟 원형 영역 */}
+      <Targets />
 
       <directionalLight
         castShadow
