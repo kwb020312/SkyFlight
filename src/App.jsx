@@ -7,6 +7,9 @@ import SphereEnv from "./SphereEnv";
 import Landscape from "./Landscape";
 import Airplane from "./Airplane";
 import Targets from "./Targets";
+import { EffectComposer, HueSaturation } from "@react-three/postprocessing";
+import MotionBlur from "./MotionBlur";
+import { BlendFunction } from "postprocessing";
 
 function App() {
   return (
@@ -41,6 +44,15 @@ function App() {
         shadow-camera-left={-6.2}
         shadow-camera-right={6.4}
       />
+
+      <EffectComposer>
+        <MotionBlur />
+        <HueSaturation
+          blendFunction={BlendFunction.NORMAL}
+          hue={-0.15}
+          saturation={0.1}
+        />
+      </EffectComposer>
     </>
   );
 }
