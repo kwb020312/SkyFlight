@@ -1,6 +1,8 @@
+import { useFrame } from "@react-three/fiber";
 import { useMemo, useState } from "react";
 import { Quaternion, TorusGeometry, Vector3 } from "three";
 import { mergeBufferGeometries } from "three-stdlib";
+import { planePosition } from "./Airplane";
 
 function randomPoint(scale) {
   return new Vector3(
@@ -48,6 +50,23 @@ const Targets = () => {
     });
     return geo;
   }, [targets]);
+
+  useFrame(() => {
+    targets.forEach((target, i) => {
+      const v = planePosition.clone().sub(target.center);
+      const dist = target.direction.dot(v);
+      const projected = planePosition
+        .clone()
+        .sub(target.direction.clone().multiplyScalar(dist));
+
+      const hitDist = projected.distanceTo(target.center);
+      if (hitDist < TARGET_RAD && Math.abs(dist) < 0.05) target.hit = true;
+    });
+
+    const atLeastOneHit = targets.find((target) => target.hit);
+    if (atLeastOneHit) setTargets(targets.filter((target) => !target.hit));
+  });
+
   return (
     <mesh geometry={geometry}>
       <meshStandardMaterial roughness={0.5} metalness={0.5} />
